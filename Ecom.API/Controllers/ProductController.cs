@@ -2,7 +2,6 @@
 using Ecom.API.Helper;
 using Ecom.Core.DTO;
 using Ecom.Core.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecom.API.Controllers
