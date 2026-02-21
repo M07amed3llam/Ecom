@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Ecom.API.Helper;
 using Ecom.Core.DTO;
 using Ecom.Core.Entities.Product;
 using Ecom.Core.Interfaces;
@@ -19,7 +20,7 @@ namespace Ecom.API.Controllers
             {
                 var categories = await work.CategoryRepository.GetAllAsync();
                 if (categories is null || !categories.Any())
-                    return NotFound("No categories found.");
+                    return BadRequest(new ResponseAPI(400));
                 return Ok(categories);
             }
             catch (Exception ex)
@@ -35,7 +36,7 @@ namespace Ecom.API.Controllers
             {
                 var category = await work.CategoryRepository.GetByIdAsync(id);
                 if (category is null)
-                    return NotFound($"Category with ID {id} not found.");
+                    return BadRequest(new ResponseAPI(400, $"Not found Category with Id: {id}"));
                 return Ok(category);
             }
             catch (Exception ex)
@@ -51,7 +52,7 @@ namespace Ecom.API.Controllers
             {
                 var category = mapper.Map<Category>(categoryDTO);
                 await work.CategoryRepository.AddAsync(category);
-                return Ok(new { message = "Category has been added" });
+                return Ok(new ResponseAPI(200, "Category has been added"));
             }
             catch (Exception ex)
             {
@@ -66,7 +67,7 @@ namespace Ecom.API.Controllers
             {
                 var category = mapper.Map<Category>(CategoryDTO);
                 await work.CategoryRepository.UpdateAsync(category);
-                return Ok(new { message = "Category has been updated" });
+                return Ok(new ResponseAPI(200, "Category has been updated"));
             }
             catch (Exception ex)
             {
@@ -80,7 +81,7 @@ namespace Ecom.API.Controllers
             try
             {
                 await work.CategoryRepository.DeleteAsync(id);
-                return Ok(new { message = "Category has been deleted" });
+                return Ok(new ResponseAPI(200, "Category has been deleted"));
             }
             catch (Exception ex)
             {
