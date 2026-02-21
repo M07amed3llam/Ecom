@@ -17,22 +17,22 @@ namespace Ecom.Infrastructure.Data.Config
             builder.Property(p => p.Description).IsRequired()
                 .HasMaxLength(200);
 
-            builder.Property(p => p.Price).HasColumnType("decimal(18,2)").IsRequired();
+            builder.Property(p => p.NewPrice).HasColumnType("decimal(18,2)").IsRequired();
 
             builder.HasData(new Product
-                {
-                    Id = 1,
-                    Name = "Product 1",
-                    Description = "Description for Product 1",
-                    Price = 9.99m,
-                    CategoryId = 1
-                },
+            {
+                Id = 1,
+                Name = "Product 1",
+                Description = "Description for Product 1",
+                NewPrice = 9.99m,
+                CategoryId = 1
+            },
                 new Product
                 {
                     Id = 2,
                     Name = "Product 2",
                     Description = "Description for Product 2",
-                    Price = 19.99m,
+                    NewPrice = 19.99m,
                     CategoryId = 1
                 },
                 new Product
@@ -40,7 +40,7 @@ namespace Ecom.Infrastructure.Data.Config
                     Id = 3,
                     Name = "Product 3",
                     Description = "Description for Product 3",
-                    Price = 29.99m,
+                    NewPrice = 29.99m,
                     CategoryId = 2
                 },
                 new Product
@@ -48,7 +48,7 @@ namespace Ecom.Infrastructure.Data.Config
                     Id = 4,
                     Name = "Product 4",
                     Description = "Description for Product 4",
-                    Price = 39.99m,
+                    NewPrice = 39.99m,
                     CategoryId = 2
                 },
                 new Product
@@ -56,7 +56,7 @@ namespace Ecom.Infrastructure.Data.Config
                     Id = 5,
                     Name = "Product 5",
                     Description = "Description for Product 5",
-                    Price = 49.99m,
+                    NewPrice = 49.99m,
                     CategoryId = 3
                 }
             );

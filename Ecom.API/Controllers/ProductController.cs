@@ -3,6 +3,7 @@ using Ecom.API.Helper;
 using Ecom.Core.DTO;
 using Ecom.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Ecom.API.Controllers
 {
@@ -46,6 +47,20 @@ namespace Ecom.API.Controllers
                 if (result is null)
                     return BadRequest(new ResponseAPI(400));
                 return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ResponseAPI(400, ex.Message));
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> add(AddProductDTO productDTO)
+        {
+            try
+            {
+                await work.ProductRepository.AddAsync(productDTO);
+                return Ok(new ResponseAPI(200, "Product added successfully"));
             }
             catch (Exception ex)
             {
