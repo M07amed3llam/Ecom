@@ -5,8 +5,6 @@ using Ecom.Core.Interfaces;
 using Ecom.Core.Services;
 using Ecom.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using System.Globalization;
-using System.Runtime.InteropServices;
 
 namespace Ecom.Infrastructure.Repositories
 {
@@ -44,6 +42,18 @@ namespace Ecom.Infrastructure.Repositories
             return true;
         }
 
+        public async Task DeleteAsync(Product product)
+        {
+            var photo = await context.Photos.Where(m => m.ProductId == product.Id).ToListAsync();
+            foreach (var item in photo)
+            {
+                imageManagementService.DeleteImageAsync(item.ImageName);
+            }
+
+            context.Products.Remove(product);
+            await context.SaveChangesAsync();
+        }
+
         public async Task<bool> UpdateAsync(UpdateProductDTO updateProductDTO)
         {
             if (updateProductDTO is null)
@@ -56,7 +66,7 @@ namespace Ecom.Infrastructure.Repositories
             if(findProduct is null)
                 return false;
 
-            mapper.Map<Product>(findProduct);
+            mapper.Map(updateProductDTO, findProduct);
 
             var findPhoto = await context.Photos.Where(m => m.ProductId == updateProductDTO.Id).ToListAsync();
 
