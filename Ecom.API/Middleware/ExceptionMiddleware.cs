@@ -28,7 +28,7 @@ namespace Ecom.API.Middleware
                 context.Response.ContentType = "application/json";
 
                 var response = Environment.IsDevelopment() ?
-                    new ApiException((int)HttpStatusCode.InternalServerError, ex.Message, ex.StackTrace)
+                    new ApiException((int)HttpStatusCode.InternalServerError, ex.Message, ex.StackTrace!)
                     : new ApiException((int)HttpStatusCode.InternalServerError, ex.Message);
 
                 var json = JsonSerializer.Serialize(response);

@@ -4,7 +4,7 @@
     {
         public int StatusCode { get; set; }
         public string? Message { get; set; }
-        public ResponseAPI(int statusCode, string message = null)
+        public ResponseAPI(int statusCode, string message = null!)
         {
             StatusCode = statusCode;
             Message = message ?? GetStatusMessage(StatusCode);

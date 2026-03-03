@@ -35,7 +35,6 @@ namespace Ecom.API
 
             app.UseAuthorization();
 
-
             app.MapControllers();
 
             app.Run();
