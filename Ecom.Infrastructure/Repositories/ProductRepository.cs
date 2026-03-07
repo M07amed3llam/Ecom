@@ -28,6 +28,18 @@ namespace Ecom.Infrastructure.Repositories
                 .Include(m => m.Photos)
                 .AsNoTracking();
 
+            // filtring by word
+            if (!string.IsNullOrEmpty(productParams.Search))
+            {
+                var searchWords = productParams.Search.Split(' ');
+
+                query = query.Where(m => searchWords.All(word =>
+                    m.Name.ToLower().Contains(word.ToLower()) 
+                    ||
+                    m.Description.ToLower().Contains(word.ToLower())
+                ));
+            }
+
             // filtring by categoryId
             if (productParams.CategoryId.HasValue)
             {
