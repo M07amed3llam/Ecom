@@ -3,6 +3,7 @@ using Ecom.Core.DTO;
 using Ecom.Core.Entities.Product;
 using Ecom.Core.Interfaces;
 using Ecom.Core.Services;
+using Ecom.Core.Sharing;
 using Ecom.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,7 +21,7 @@ namespace Ecom.Infrastructure.Repositories
             this.imageManagementService = imageManagementService;
         }
 
-        public async Task<IEnumerable<ProductDTO>> GetAllAsync(string sort, int? categoryId)
+        public async Task<IEnumerable<ProductDTO>> GetAllAsync(ProductParams productParams)
         {
             var query = context.Products
                 .Include(m => m.Category)
@@ -28,23 +29,19 @@ namespace Ecom.Infrastructure.Repositories
                 .AsNoTracking();
 
             // filtring by categoryId
-            if (categoryId.HasValue)
+            if (productParams.CategoryId.HasValue)
             {
-                query = query.Where(m => m.CategoryId == categoryId);
+                query = query.Where(m => m.CategoryId == productParams.CategoryId);
             }
 
-            switch (sort)
+            query = productParams.Sort switch
             {
-                case "PriceAsn":
-                    query = query.OrderBy(m => m.NewPrice);
-                    break;
-                case "PriceDes":
-                    query = query.OrderByDescending(m => m.NewPrice);
-                    break;
-                default:
-                    query = query.OrderBy(m => m.Name);
-                    break;
-            }
+                "PriceAsc" => query.OrderBy(m => m.NewPrice),
+                "PriceDsc" => query.OrderByDescending(m => m.NewPrice),
+                _ => query.OrderBy(m => m.Name),
+            };
+
+            query = query.Skip((productParams.PageNumber - 1) * productParams.pageSize).Take(productParams.pageSize);
 
             var result = mapper.Map<List<ProductDTO>>(query);
             return result;
