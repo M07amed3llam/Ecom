@@ -7,6 +7,7 @@ namespace Ecom.Core.Interfaces
     public interface IProductRepository : IGenericRepository<Product>
     {
         // for future method
+        Task<IEnumerable<ProductDTO>> GetAllAsync(string sort, int? categoryId);
         Task<bool> AddAsync(AddProductDTO productDTO);
         Task<bool> UpdateAsync(UpdateProductDTO updateProductDTO);
         Task DeleteAsync(Product product);
