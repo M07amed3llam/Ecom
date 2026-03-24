@@ -42,6 +42,8 @@ namespace Ecom.API
 
             app.UseMiddleware<ExceptionMiddleware>();
 
+            app.UseStaticFiles();
+
             app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
             app.UseHttpsRedirection();

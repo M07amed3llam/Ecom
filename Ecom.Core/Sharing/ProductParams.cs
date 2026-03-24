@@ -6,7 +6,7 @@
         public int? CategoryId { get; set; }
         public string? Search { get; set; }
         public int MaxPageSize { get; set; } = 6;
-        private int _pageSize = 3;
+        private int _pageSize = 4;
 
         public int pageSize
         {

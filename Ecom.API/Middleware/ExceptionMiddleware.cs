@@ -8,14 +8,14 @@ namespace Ecom.API.Middleware
     public class ExceptionMiddleware
     {
         private readonly RequestDelegate _next;
-        public IHostEnvironment Environment { get; }
+        public IHostEnvironment _environment { get; }
         private readonly IMemoryCache _memoryCache;
         private readonly TimeSpan _rateLimitWindow = TimeSpan.FromSeconds(30);
 
         public ExceptionMiddleware(RequestDelegate next, IHostEnvironment environment, IMemoryCache memoryCache)
         {
             _next = next;
-            Environment = environment;
+            _environment = environment;
             _memoryCache = memoryCache;
         }
 
@@ -25,19 +25,19 @@ namespace Ecom.API.Middleware
             {
                 ApplysecurityHeaders(context);
 
-                if (!IsRequestAllowed(context))
-                {
-                    context.Response.StatusCode = (int)HttpStatusCode.TooManyRequests;
-                    context.Response.ContentType = "application/json";
+                //if (!IsRequestAllowed(context))
+                //{
+                //    context.Response.StatusCode = (int)HttpStatusCode.TooManyRequests;
+                //    context.Response.ContentType = "application/json";
 
-                    var response = new 
-                        ApiException((int)HttpStatusCode.TooManyRequests, "Too many requests. Please try again later.");
+                //    var response = new 
+                //        ApiException((int)HttpStatusCode.TooManyRequests, "Too many requests. Please try again later.");
 
-                    var json = JsonSerializer.Serialize(response);
+                //    var json = JsonSerializer.Serialize(response);
 
-                    await context.Response.WriteAsync(json);
-                    return;
-                }
+                //    await context.Response.WriteAsync(json);
+                //    return;
+                //}
                 await _next(context);
             }
             catch (Exception ex)
@@ -45,7 +45,7 @@ namespace Ecom.API.Middleware
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 context.Response.ContentType = "application/json";
 
-                var response = Environment.IsDevelopment() ?
+                var response = _environment.IsDevelopment() ?
                     new ApiException((int)HttpStatusCode.InternalServerError, ex.Message, ex.StackTrace!)
                     : new ApiException((int)HttpStatusCode.InternalServerError, ex.Message);
 
@@ -69,7 +69,7 @@ namespace Ecom.API.Middleware
 
             if (dateNow - timesTamp < _rateLimitWindow)
             {
-                if (count >= 5) // Limit to 5 requests per window
+                if (count >= 8) // Limit to 5 requests per window
                 {
                     return false;
                 }
